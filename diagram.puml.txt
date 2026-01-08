@@ -1,0 +1,78 @@
+//Daniel Akbari - ID#: 40298757
+//Sepehr Ghasemzadeh Moghaddam - ID#: 40268909
+//Assignment 3 - COEN 244
+//“We certify that this submission is the original work of members of the group and meets the Faculty's Expectations of Originality”
+
+//Task 1.1
+
+@startuml
+' Package base class
+class Package {
+  # sname      : std::string
+  # saddress   : std::string
+  # scity      : std::string
+  # sstate     : std::string
+  # szip       : std::string
+
+  # rname      : std::string
+  # raddress   : std::string
+  # rcity      : std::string
+  # rstate     : std::string
+  # rzip       : std::string
+
+  # weight     : double
+  # cost       : double
+
+  + Package() 
+  + Package(sn: std::string, sa: std::string, sc: std::string, ss: std::string, sz: std::string,
+            rn: std::string, ra: std::string, rc: std::string, rs: std::string, rz: std::string,
+            w: double, c: double)
+  + Package(other: Package&)
+
+  + ~Package() : default <<virtual>>
+  + virtual calculateCost() : double
+}
+
+note right of Package
+  Package::calculateCost() returns weight * cost
+  (weight and cost validated to be positive in ctor)
+end note
+
+' TwoDayPackage derived class
+class TwoDayPackage {
+  - fee : double
+
+  + TwoDayPackage()
+  + TwoDayPackage(..., f: double)
+  + TwoDayPackage(other: TwoDayPackage&)
+
+  + ~TwoDayPackage() : default
+  + calculateCost() : double <<override, final>>
+}
+
+note right of TwoDayPackage
+  TwoDayPackage::calculateCost() = Package::calculateCost() + fee
+end note
+
+' OvernightPackage derived class
+class OvernightPackage {
+  - fee : double   ' additional fee per ounce
+
+  + OvernightPackage()
+  + OvernightPackage(..., f: double)
+  + OvernightPackage(other: OvernightPackage&)
+
+  + ~OvernightPackage() : default
+  + calculateCost() : double <<override, final>>
+}
+
+note right of OvernightPackage
+  OvernightPackage::calculateCost() = (cost + fee) * weight
+  (fee is additional per-ounce charge)
+end note
+
+' Inheritance relationships
+Package <|-- TwoDayPackage
+Package <|-- OvernightPackage
+
+@enduml
